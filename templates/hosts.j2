@@ -1,0 +1,15 @@
+127.0.0.1	localhost
+
+# The following lines are desirable for IPv6 capable hosts
+::1	ip6-localhost	ip6-loopback
+fe00::0	ip6-localnet
+ff00::0	ip6-mcastprefix
+ff02::1	ip6-allnodes
+ff02::2	ip6-allrouters
+ff02::3	ip6-allhosts
+127.0.1.1	ubuntu-{{ ohai_lsb.codename }}	ubuntu-{{ ohai_lsb.codename }}
+
+# Ansible inventory
+{% for host in groups['all'] | difference(['localhost']) %}
+{{ hostvars[host].ansible_host | default(hostvars[host].ansible_default_ipv4) }} {{ hostvars[host].inventory_hostname }} {{ hostvars[host].inventory_hostname_short }} # Group: {{ hostvars[host].group_names | last }} ({{ groups[(hostvars[host].group_names | last)].index(host) | int + 1 }}/{{ groups[(hostvars[host].group_names | last)] | length }})
+{% endfor %}
